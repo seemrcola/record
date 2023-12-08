@@ -1,4 +1,4 @@
-import {useRef} from 'react'
+import {useEffect, useRef, useState} from 'react'
 import {Icon} from '@iconify/react'
 
 /**
@@ -20,39 +20,49 @@ export function rafDebounce(cb: () => void, queue: any[]) {
 
 const Movebar = () => {
   // 处理屏幕中心点 -----------------------------------------
-  let center = {centerX: 0, centerY: 0}
+  const [center, setCenter] = useState({centerX: 0, centerY: 0})
   
-  calcScreenCenter()
+  useEffect(() => {
+    calcScreenCenter()
+    
+    function calcScreenCenter() {
+      const documentElement = document.documentElement
+      const centerX = documentElement.clientWidth / 2
+      const centerY = documentElement.clientHeight / 2
+      setCenter({centerX, centerY})
+    }
+    
+    window.addEventListener('resize', calcScreenCenter)
+    return () => {
+      window.removeEventListener('resize', calcScreenCenter)
+    }
+  }, [])
   
-  function calcScreenCenter() {
-    const documentElement = document.documentElement
-    const centerX = documentElement.clientWidth / 2
-    const centerY = documentElement.clientHeight / 2
-    center = {centerX, centerY}
-  }
   
   // 处理鼠标移动 -----------------------------------------
   let isMove = false
   let start = {startX: 0, startY: 0}
   const movebarRef = useRef<HTMLDivElement>()      // 移动的元素
   const borderRef = useRef<HTMLDivElement>()       // 边框
-  const shadowLeftRef = useRef<HTMLDivElement>()   // 左侧阴影
-  const shadowRightRef = useRef<HTMLDivElement>()  // 右侧阴影
-  const shadowTopRef = useRef<HTMLDivElement>()    // 顶部阴影
-  const shadowBottomRef = useRef<HTMLDivElement>() // 底部阴影
-  const tasks = []
+  const tasks = []                                 // 任务队列
+  const shadows = {                                // 阴影
+    left: useRef<HTMLDivElement>(),
+    right: useRef<HTMLDivElement>(),
+    top: useRef<HTMLDivElement>(),
+    bottom: useRef<HTMLDivElement>(),
+  }
   
   function mousedownHandler(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     isMove = true
     start = {startX: e.clientX, startY: e.clientY}
+    
     document.addEventListener('mousemove', mousemoveHandler)
     document.addEventListener('mouseup', mouseupHandler)
     
-    borderRef.current.style.opacity = '1'  // 显示边框
-    shadowLeftRef.current.style.opacity = '1'
-    shadowRightRef.current.style.opacity = '1'
-    shadowTopRef.current.style.opacity = '1'
-    shadowBottomRef.current.style.opacity = '1'
+    borderRef.current.style.opacity = '1'    // 显示边框
+    Object.values(shadows).forEach(item => { // 显示阴影
+      item.current.style.opacity = '1'
+    })
   }
   
   function mousemoveHandler(e: MouseEvent) {
@@ -84,10 +94,9 @@ const Movebar = () => {
     
     borderRef.current.style.opacity = '0'
     setTimeout(() => {
-      shadowLeftRef.current.style.opacity = '0'
-      shadowRightRef.current.style.opacity = '0'
-      shadowTopRef.current.style.opacity = '0'
-      shadowBottomRef.current.style.opacity = '0'
+      Object.values(shadows).forEach(item => {
+        item.current.style.opacity = '0'
+      })
     }, 300)
     adsorb(true)
   }
@@ -122,13 +131,13 @@ const Movebar = () => {
     if (y < f1(x) && y > f2(x)) position = 'right'
     // 3.3 位置映射到屏幕边缘
     if (position === 'top')
-      shadowTopRef.current.style.left = `${elementCenterX - 16}px`
+      shadows.top.current.style.left = `${elementCenterX - 16}px`
     if (position === 'bottom')
-      shadowBottomRef.current.style.left = `${elementCenterX - 16}px`
+      shadows.bottom.current.style.left = `${elementCenterX - 16}px`
     if (position === 'left')
-      shadowLeftRef.current.style.top = `${elementCenterY - 16}px`
+      shadows.left.current.style.top = `${elementCenterY - 16}px`
     if (position === 'right')
-      shadowRightRef.current.style.top = `${elementCenterY - 16}px`
+      shadows.right.current.style.top = `${elementCenterY - 16}px`
     // 是否需要移动moveRef元素
     if (!ifMove) return
     // 3.4. 移动元素
@@ -149,8 +158,6 @@ const Movebar = () => {
     }, 150) // 这里略小于动画时间 有一种吸附的效果
     
   }
-  
-  window.addEventListener('resize', () => calcScreenCenter())
   
   return (
     <>
@@ -174,25 +181,25 @@ const Movebar = () => {
         pointer-events-none"
       />
       <div
-        ref={shadowLeftRef}
+        ref={shadows.left}
         className="
         movebar-shadow-left h-[32px] w-[8px] rounded-[4px] bg-blue-500
         fixed left-0 top-0 opacity-0"
       />
       <div
-        ref={shadowRightRef}
+        ref={shadows.right}
         className="
         movebar-shadow-right h-[32px] w-[8px] rounded-[4px] bg-blue-500
         fixed right-0 bottom-0 opacity-0"
       />
       <div
-        ref={shadowTopRef}
+        ref={shadows.top}
         className="
         movebar-shadow-top w-[32px] h-[8px] rounded-[4px] bg-blue-500
         fixed left-0 top-0 opacity-0"
       />
       <div
-        ref={shadowBottomRef}
+        ref={shadows.bottom}
         className="
         movebar-shadow-bottom w-[32px] h-[8px] rounded-[4px] bg-blue-500
         fixed right-0 bottom-0 opacity-0"
