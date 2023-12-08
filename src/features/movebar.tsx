@@ -112,11 +112,11 @@ const Movebar = () => {
     if (y < f1(x) && y > f2(x)) position = 'right'
     // 3.3 位置映射到屏幕边缘
     console.log(position, elementCenterX, elementCenterY)
-    if (position === 'top' || position === 'bottom')
+    if (position === 'top')
       shadowTopRef.current.style.left = `${elementCenterX}px`
     if (position === 'bottom')
       shadowBottomRef.current.style.left = `${elementCenterX}px`
-    if (position === 'left' || position === 'right')
+    if (position === 'left')
       shadowLeftRef.current.style.top = `${elementCenterY}px`
     if (position === 'right')
       shadowRightRef.current.style.top = `${elementCenterY}px`
