@@ -72,8 +72,8 @@ const Movebar = () => {
       // 更新start
       start = {startX: clientX, startY: clientY}
       // 阴影
+      adsorb(false)
     }
-    adsorb(false)
     rafDebounce(task, tasks) // 优化性能
   }
   
