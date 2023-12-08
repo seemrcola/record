@@ -49,6 +49,10 @@ const Movebar = () => {
     document.addEventListener('mouseup', mouseupHandler)
     
     borderRef.current.style.opacity = '1'  // 显示边框
+    shadowLeftRef.current.style.opacity = '1'
+    shadowRightRef.current.style.opacity = '1'
+    shadowTopRef.current.style.opacity = '1'
+    shadowBottomRef.current.style.opacity = '1'
   }
   
   function mousemoveHandler(e: MouseEvent) {
@@ -79,6 +83,12 @@ const Movebar = () => {
     document.removeEventListener('mouseup', mouseupHandler)
     
     borderRef.current.style.opacity = '0'
+    setTimeout(() => {
+      shadowLeftRef.current.style.opacity = '0'
+      shadowRightRef.current.style.opacity = '0'
+      shadowTopRef.current.style.opacity = '0'
+      shadowBottomRef.current.style.opacity = '0'
+    }, 1000)
     adsorb(true)
   }
   
@@ -111,15 +121,14 @@ const Movebar = () => {
     if (y > f1(x) && y < f2(x)) position = 'left'
     if (y < f1(x) && y > f2(x)) position = 'right'
     // 3.3 位置映射到屏幕边缘
-    console.log(position, elementCenterX, elementCenterY)
     if (position === 'top')
-      shadowTopRef.current.style.left = `${elementCenterX}px`
+      shadowTopRef.current.style.left = `${elementCenterX - 16}px`
     if (position === 'bottom')
-      shadowBottomRef.current.style.left = `${elementCenterX}px`
+      shadowBottomRef.current.style.left = `${elementCenterX - 16}px`
     if (position === 'left')
-      shadowLeftRef.current.style.top = `${elementCenterY}px`
+      shadowLeftRef.current.style.top = `${elementCenterY - 16}px`
     if (position === 'right')
-      shadowRightRef.current.style.top = `${elementCenterY}px`
+      shadowRightRef.current.style.top = `${elementCenterY - 16}px`
     // 是否需要移动moveRef元素
     if (!ifMove) return
     // 3.4. 移动元素
@@ -167,26 +176,26 @@ const Movebar = () => {
       <div
         ref={shadowLeftRef}
         className="
-        movebar-shadow-left h-8 w-[8px] rounded-[4px] bg-blue-500
-        fixed left-0 top-0"
+        movebar-shadow-left h-[32px] w-[8px] rounded-[4px] bg-blue-500
+        fixed left-0 top-0 opacity-0"
       />
       <div
         ref={shadowRightRef}
         className="
-        movebar-shadow-right h-8 w-[8px] rounded-[4px] bg-blue-500
-        fixed right-0 bottom-0"
+        movebar-shadow-right h-[32px] w-[8px] rounded-[4px] bg-blue-500
+        fixed right-0 bottom-0 opacity-0"
       />
       <div
         ref={shadowTopRef}
         className="
-        movebar-shadow-top w-8 h-[8px] rounded-[4px] bg-blue-500
-        fixed left-0 top-0"
+        movebar-shadow-top w-[32px] h-[8px] rounded-[4px] bg-blue-500
+        fixed left-0 top-0 opacity-0"
       />
       <div
         ref={shadowBottomRef}
         className="
-        movebar-shadow-bottom w-8 h-[8px] rounded-[4px] bg-blue-500
-        fixed right-0 bottom-0"
+        movebar-shadow-bottom w-[32px] h-[8px] rounded-[4px] bg-blue-500
+        fixed right-0 bottom-0 opacity-0"
       />
     </>
   )
