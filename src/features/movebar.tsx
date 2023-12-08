@@ -18,6 +18,8 @@ export function rafDebounce(cb: () => void, queue: any[]) {
   })
 }
 
+type Orientation = 'top' | 'bottom' | 'left' | 'right'
+
 const Movebar = () => {
   // 处理屏幕中心点 -----------------------------------------
   const [center, setCenter] = useState({centerX: 0, centerY: 0})
@@ -122,7 +124,7 @@ const Movebar = () => {
      * k1上方K2上方 top
      * k1下方K2下方 bottom
      */
-    let position = ''
+    let position: Orientation = 'top'
     const x = elementCenterX - centerX
     const y = elementCenterY - centerY
     if (y < f1(x) && y < f2(x)) position = 'top'
@@ -130,14 +132,10 @@ const Movebar = () => {
     if (y > f1(x) && y < f2(x)) position = 'left'
     if (y < f1(x) && y > f2(x)) position = 'right'
     // 3.3 位置映射到屏幕边缘
-    if (position === 'top')
-      shadows.top.current.style.left = `${elementCenterX - 16}px`
-    if (position === 'bottom')
-      shadows.bottom.current.style.left = `${elementCenterX - 16}px`
-    if (position === 'left')
-      shadows.left.current.style.top = `${elementCenterY - 16}px`
-    if (position === 'right')
-      shadows.right.current.style.top = `${elementCenterY - 16}px`
+    if (position === 'top' || position === 'bottom')
+      shadows[position].current.style.left = `${elementCenterX - 16}px`
+    if (position === 'left' || position === 'right')
+      shadows[position].current.style.top = `${elementCenterY - 16}px`
     // 是否需要移动moveRef元素
     if (!ifMove) return
     // 3.4. 移动元素
@@ -156,7 +154,6 @@ const Movebar = () => {
     setTimeout(() => {
       movebarRef.current.style.transition = ''
     }, 150) // 这里略小于动画时间 有一种吸附的效果
-    
   }
   
   return (
@@ -180,30 +177,21 @@ const Movebar = () => {
         fixed left-0 top-0
         pointer-events-none"
       />
-      <div
-        ref={shadows.left}
-        className="
-        movebar-shadow-left h-[32px] w-[8px] rounded-[4px] bg-blue-500
-        fixed left-0 top-0 opacity-0"
-      />
-      <div
-        ref={shadows.right}
-        className="
-        movebar-shadow-right h-[32px] w-[8px] rounded-[4px] bg-blue-500
-        fixed right-0 bottom-0 opacity-0"
-      />
-      <div
-        ref={shadows.top}
-        className="
-        movebar-shadow-top w-[32px] h-[8px] rounded-[4px] bg-blue-500
-        fixed left-0 top-0 opacity-0"
-      />
-      <div
-        ref={shadows.bottom}
-        className="
-        movebar-shadow-bottom w-[32px] h-[8px] rounded-[4px] bg-blue-500
-        fixed right-0 bottom-0 opacity-0"
-      />
+      {Object.values(shadows).map((item, index) => {
+        return (
+          <div
+            key={index}
+            ref={item}
+            className={`
+              movebar-shadow-${index}
+              ${index === 0 || index === 1 ? 'h-[32px] w-[8px]' : 'w-[32px] h-[8px]'}
+              ${index === 0 || index === 2 ? 'left-0 top-0' : 'right-0 bottom-0'}
+              rounded-[4px] bg-blue-500
+              fixed opacity-0
+            `}
+          />
+        )
+      })}
     </>
   )
 }
