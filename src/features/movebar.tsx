@@ -88,7 +88,7 @@ const Movebar = () => {
       shadowRightRef.current.style.opacity = '0'
       shadowTopRef.current.style.opacity = '0'
       shadowBottomRef.current.style.opacity = '0'
-    }, 1000)
+    }, 300)
     adsorb(true)
   }
   
