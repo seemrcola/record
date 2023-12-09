@@ -14,6 +14,7 @@ const Header = () => {
 function IndexPopup() {
   function goto() {
     // todo: goto tab
+    chrome.tabs.create({url: chrome.runtime.getURL('./tabs/start.html')})
   }
   
   return (

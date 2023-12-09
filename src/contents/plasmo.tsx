@@ -1,3 +1,4 @@
+import React, {useRef} from "react"
 import type {PlasmoCSConfig} from "plasmo"
 import cssText from "data-text:~/style.css"
 
@@ -13,8 +14,13 @@ export const getStyle = () => {
 }
 
 const GoogleSidebar = () => {
+  const camera = useRef<HTMLVideoElement>(null)
+  
   return (
-    <Movebar/>
+    <>
+      <Movebar/>
+    </>
+  
   )
 }
 

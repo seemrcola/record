@@ -23,15 +23,23 @@ type Orientation = 'top' | 'bottom' | 'left' | 'right'
 const Movebar = () => {
   // 处理屏幕中心点 -----------------------------------------
   const [center, setCenter] = useState({centerX: 0, centerY: 0})
+  const [innerSize, setInnerSize] = useState({width: 0, height: 0})
   
   useEffect(() => {
     calcScreenCenter()
     
     function calcScreenCenter() {
       const documentElement = document.documentElement
-      const centerX = documentElement.clientWidth / 2
-      const centerY = documentElement.clientHeight / 2
-      setCenter({centerX, centerY})
+      setCenter({
+        centerX: documentElement.clientWidth / 2,
+        centerY: documentElement.clientHeight / 2,
+      })
+      setInnerSize({
+        width: documentElement.clientWidth,
+        height: documentElement.clientHeight,
+      })
+      
+      adsorb(true)
     }
     
     window.addEventListener('resize', calcScreenCenter)
@@ -163,8 +171,9 @@ const Movebar = () => {
         className="
         w-12 h-12 flex items-center justify-center
         bg-amber-100 rounded-full p-2
-        fixed left-5 top-5"
+        fixed z-[2147483647]"
         onMouseDown={e => mousedownHandler(e)}
+        title={'双击前往录制页面'}
       >
         <Icon icon='icon-park:movie' className="text-4xl cursor-pointer"/>
       </div>
@@ -172,22 +181,26 @@ const Movebar = () => {
         ref={borderRef}
         className="
         opacity-0 transition-[300]
-        h-[100vh] w-[100vw]
         box-border border-[8px] border-solid border-[#f60]
         fixed left-0 top-0
         pointer-events-none"
+        style={{
+          width: innerSize.width,
+          height: innerSize.height,
+        }}
       />
-      {Object.values(shadows).map((item, index) => {
+      {Object.keys(shadows).map((item, index) => {
         return (
           <div
             key={index}
-            ref={item}
+            ref={shadows[item]}
             className={`
               movebar-shadow-${index}
-              ${index === 0 || index === 1 ? 'h-[32px] w-[8px]' : 'w-[32px] h-[8px]'}
-              ${index === 0 || index === 2 ? 'left-0 top-0' : 'right-0 bottom-0'}
+              ${item === 'left' || item === 'right' ? 'h-[32px] w-[8px]' : 'w-[32px] h-[8px]'}
+              ${item === 'left' || item === 'top' ? 'left-0 top-0' : 'right-0 bottom-0'}
               rounded-[4px] bg-blue-500
               fixed opacity-0
+              pointer-events-none
             `}
           />
         )
