@@ -61,6 +61,7 @@ const Movebar = () => {
     top: useRef<HTMLDivElement>(),
     bottom: useRef<HTMLDivElement>(),
   }
+  const [direction, setDirection] = useState<Orientation>('top') // 当前移动的方向
   
   function mousedownHandler(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     isMove = true
@@ -146,6 +147,7 @@ const Movebar = () => {
       shadows[position].current.style.top = `${elementCenterY - 16}px`
     // 是否需要移动moveRef元素
     if (!ifMove) return
+    setDirection(position) // 更新方向
     // 3.4. 移动元素
     movebarRef.current.style.transition = 'all 0.3s'
     requestAnimationFrame(() => {
@@ -164,18 +166,41 @@ const Movebar = () => {
     }, 150) // 这里略小于动画时间 有一种吸附的效果
   }
   
+  // 吸附的盒子的四个方向上的小方块 -- 参考loom
+  
   return (
     <>
       <div
         ref={movebarRef}
-        className="
-        w-12 h-12 flex items-center justify-center
-        bg-amber-100 rounded-full p-2
-        fixed z-[2147483647]"
-        onMouseDown={e => mousedownHandler(e)}
-        title={'双击前往录制页面'}
+        className="rounded-full p-4 fixed z-[2147483647]"
       >
-        <Icon icon='icon-park:movie' className="text-4xl cursor-pointer"/>
+        {/*上下左右放置四个小盒子 -- 参考loom*/}
+        {Object.keys(shadows).map((item, index) => {
+          return (
+            <div
+              key={`drag-${index}`}
+              className={`
+              drag-${index}
+              h-[16px] w-[16px] absolute
+              rounded-[4px] bg-blue-500 cursor-pointer
+              ${item === 'left' ? 'left-0 top-[50%] translate-y-[-50%]' : ''}
+              ${item === 'right' ? 'right-0 top-[50%] translate-y-[-50%]' : ''}
+              ${item === 'top' ? 'top-0 left-[50%] translate-x-[-50%]' : ''}
+              ${item === 'bottom' ? 'bottom-0 left-[50%] translate-x-[-50%]' : ''}`
+              }
+              style={{display: direction === item ? 'block' : 'none'}}
+              onMouseDown={e => mousedownHandler(e)}
+            />
+          )
+        })}
+        <div
+          className="
+          w-14 h-14 flex items-center justify-center
+          bg-amber-100 rounded-full p-2"
+          title={'点击前往录制页面'}
+        >
+          <Icon icon='icon-park:movie' className="text-5xl cursor-pointer"/>
+        </div>
       </div>
       <div
         ref={borderRef}
@@ -192,7 +217,7 @@ const Movebar = () => {
       {Object.keys(shadows).map((item, index) => {
         return (
           <div
-            key={index}
+            key={`shadow-${index}`}
             ref={shadows[item]}
             className={`
               movebar-shadow-${index}
