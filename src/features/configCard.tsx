@@ -71,73 +71,74 @@ export const ConfigCard: React.FC<ConfigCardProps> =
     }
     
     return (
-      <div
-        ref={dragBoxRef}
-        className="
+      <>
+        {
+          !start &&
+          <div
+            ref={dragBoxRef}
+            className="
           fixed top-[20px] right-[20px] p-4
           border bg-[#212121] z-[100]
           h-[420px] w-[280px] rounded-[16px]
         "
-        onMouseDown={handleMouseDown}>
-        <List show={show.screen}>
-          <div className="config-card-option">
-            <Icon
-              className="text-2xl text-white hover:text-orange-400 hover:scale-125 transition-[300]"
-              icon={iconState.screen ? "gg:screen" : "gg:screen"} // TODO: change icon
-            />
-            <div className="text-white mx-8 max-w-[100px] truncate">FullScreen
-            </div>
-          </div>
-        </List>
-        <List show={show.video} isUse={iconState.video} data={cameraDevices}>
-          <div
-            className="config-card-option"
-            onMouseEnter={() => setShow({...show, video: true})}
-            onMouseLeave={() => setShow({...show, video: false})}>
-            <Icon
-              icon={iconState.video ? "gg:camera" : "majesticons:camera-off-line"}
-              className={`
+            onMouseDown={handleMouseDown}
+          >
+            <List show={show.screen}>
+              <div className="config-card-option">
+                <Icon
+                  className="text-2xl text-white hover:text-orange-400 hover:scale-125 transition-[300]"
+                  icon={iconState.screen ? "gg:screen" : "gg:screen"} // TODO: change icon
+                />
+                <div
+                  className="text-white mx-8 max-w-[100px] truncate">FullScreen
+                </div>
+              </div>
+            </List>
+            <List show={show.video} isUse={iconState.video}
+                  data={cameraDevices}>
+              <div
+                className="config-card-option"
+                onMouseEnter={() => setShow({...show, video: true})}
+                onMouseLeave={() => setShow({...show, video: false})}>
+                <Icon
+                  icon={iconState.video ? "gg:camera" : "majesticons:camera-off-line"}
+                  className={`
                 text-2xl hover:text-orange-400 hover:scale-125 transition-[300]
                 ${iconState.video ? "text-white" : "text-red-500"}
               `}
-              onClick={(e) => toggle("video", e)}
-            />
-            <div className="text-white mx-8 max-w-[100px] truncate">Camera</div>
-          </div>
-        </List>
-        <List show={show.audio} isUse={iconState.audio}
-              data={microphoneDevices}>
-          <div
-            className="config-card-option"
-            onMouseEnter={() => setShow({...show, audio: true})}
-            onMouseLeave={() => setShow({...show, audio: false})}>
-            <Icon
-              icon={iconState.audio ? "ph:microphone-bold" : "iconamoon:microphone-off"}
-              className={`
+                  onClick={(e) => toggle("video", e)}
+                />
+                <div className="text-white mx-8 max-w-[100px] truncate">Camera
+                </div>
+              </div>
+            </List>
+            <List show={show.audio} isUse={iconState.audio}
+                  data={microphoneDevices}>
+              <div
+                className="config-card-option"
+                onMouseEnter={() => setShow({...show, audio: true})}
+                onMouseLeave={() => setShow({...show, audio: false})}>
+                <Icon
+                  icon={iconState.audio ? "ph:microphone-bold" : "iconamoon:microphone-off"}
+                  className={`
                 text-2xl hover:text-orange-400 hover:scale-125 transition-[300]
                 ${iconState.audio ? "text-white" : "text-red-500"}
               `}
-              onClick={(e) => toggle("audio", e)}
-            />
-            <div className="text-white mx-8 max-w-[100px] truncate">
-              Microphone
-            </div>
-          </div>
-        </List>
-        
-        {
-          !start
-            ? (<div
+                  onClick={(e) => toggle("audio", e)}
+                />
+                <div className="text-white mx-8 max-w-[100px] truncate">
+                  Microphone
+                </div>
+              </div>
+            </List>
+            
+            <div
               className="config-card-button"
               onClick={() => startRecord(true)}>
               Start Recording
-            </div>)
-            : (<div
-              className="config-card-button bg-red-500"
-              onClick={() => startRecord(false)}>
-              Stop Recording
-            </div>)
+            </div>
+          </div>
         }
-      </div>
+      </>
     )
   }
