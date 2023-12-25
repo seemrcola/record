@@ -4,4 +4,18 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+    .config-card-option {
+        @apply h-[48px] rounded-[32px] border my-4 flex items-center px-[20px]
+        bg-[#363341] hover:bg-[#615dec] transition-[300]
+        cursor-pointer
+    }
 
+    .config-card-button {
+        @apply h-[48px] rounded-[32px] border mt-8
+        flex justify-center items-center
+        bg-orange-500 text-[#fff]
+        transform transition-all duration-300
+        cursor-pointer hover:scale-105
+    }
+}

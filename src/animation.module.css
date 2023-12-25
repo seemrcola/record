@@ -1,0 +1,16 @@
+@keyframes slideInDown {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.smooth {
+    animation: slideInDown 0.2s ease-out; /* 调整持续时间和缓动函数 */
+}
+
+
