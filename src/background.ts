@@ -5,3 +5,5 @@ chrome.tabs.onActivated.addListener(function (activeInfo) {
     console.log(tab.url)
   })
 })
+
+export {}
