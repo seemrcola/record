@@ -1,5 +1,6 @@
 import {Icon} from "@iconify/react"
 import React, {useEffect, useRef} from "react"
+import animationText from "~animation.module.css"
 
 import {useDrag} from "~hooks/useDrag"
 
@@ -24,7 +25,10 @@ const RecordBox: React.FC<RecordBoxProps>
   return (
     <div
       ref={dragBoxRef}
-      className="fixed bottom-[10px] left-[10px] h-[240px] w-[240px]"
+      className={`
+        ${animationText.smooth_slideInRight}
+        fixed bottom-[10px] left-[10px] h-[240px] w-[240px]
+      `}
       onMouseDown={handleMouseDown}>
       <div
         className="w-full h-full rounded-full bg-red-300 overflow-hidden cursor-pointer">

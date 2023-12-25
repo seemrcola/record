@@ -18,7 +18,7 @@ const List: React.FC<ListProps> =
         {show && data && (
           <div
             className={`
-            ${animationText.smooth}
+            ${animationText.smooth_slideInDown}
             ${isUse ? "text-blue-300" : "text-red-500"}
             w-[280px] bg-[#212121] text-[#fff]
             absolute left-[-300px] p-4 text-sm
@@ -76,11 +76,12 @@ export const ConfigCard: React.FC<ConfigCardProps> =
           !start &&
           <div
             ref={dragBoxRef}
-            className="
-          fixed top-[20px] right-[20px] p-4
-          border bg-[#212121] z-[100]
-          h-[420px] w-[280px] rounded-[16px]
-        "
+            className={`
+              ${animationText.smooth_slideInLeft}
+              fixed top-[20px] right-[20px] p-4
+              border bg-[#212121] z-[100]
+              h-[420px] w-[280px] rounded-[16px]
+            `}
             onMouseDown={handleMouseDown}
           >
             <List show={show.screen}>
