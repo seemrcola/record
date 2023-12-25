@@ -51,7 +51,7 @@ const RecordBox: React.FC<RecordBoxProps>
           icon={!start ? "gg:play-stop-o" : "fluent:record-stop-16-regular"}
           className={`
             ${!start ? 'text-blue-400' : 'text-red-400'}
-            h-[40px] w-[40px] text-[#9797a4] rounded-full
+            h-[40px] w-[40px] text-[#9797a4] rounded-full pointer-events-none
           `}
         />
       </div>
