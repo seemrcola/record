@@ -83,13 +83,18 @@ const GoogleSidebar = () => {
       }
       setDisplayStream(stream)
       // 开启录制器
-      mediaRecorder.current = new MediaRecorder(stream, {})
+      mediaRecorder.current = new MediaRecorder(stream, {
+        mimeType: 'video/webm; codecs=vp9',
+        videoBitsPerSecond: 3000000, // 视频码率
+        audioBitsPerSecond: 128000,  // 音频码率
+      })
       const recorder = mediaRecorder.current
       recorder.start(1000)
       recorder.ondataavailable = (e) => {
         recordData.current.push(e.data)
       }
       recorder.onstop = () => {
+        setStart(false)
         // 关闭录制流
         recorder.stream.getTracks().forEach(track => track.stop())
         // 下载录制文件

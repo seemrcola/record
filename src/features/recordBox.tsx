@@ -42,7 +42,7 @@ const RecordBox: React.FC<RecordBoxProps>
         className="
           p-[4px]
           rounded-full border-[2px] border-[#8c8c8d]
-          flex items-center bg-[#212121]
+          flex items-center bg-[#212121] cursor-pointer
           absolute bottom-4 right-0 transform translate-x-[100%]
         "
         onClick={() => start && startRecord(false)}
@@ -52,7 +52,6 @@ const RecordBox: React.FC<RecordBoxProps>
           className={`
             ${!start ? 'text-blue-400' : 'text-red-400'}
             h-[40px] w-[40px] text-[#9797a4] rounded-full
-            cursor-pointer
           `}
         />
       </div>
